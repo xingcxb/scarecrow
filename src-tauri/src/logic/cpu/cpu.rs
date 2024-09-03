@@ -22,8 +22,8 @@ impl CpuInfoBasic {
     }
 }
 
-
-pub fn get_cpu_info() -> Result<CpuInfoBasic,OsError> {
+/// 获取CPU信息
+pub fn get_cpu_info() -> Result<CpuInfoBasic, OsError> {
     let mut sys = System::new_all();
     sys.refresh_all();
     // 获取CPU的名称
@@ -34,7 +34,7 @@ pub fn get_cpu_info() -> Result<CpuInfoBasic,OsError> {
     let cpu_count = sys.cpus().len();
     // 获取CPU单个核心的当前使用率
     let cpu_usage = sys.cpus().iter().map(|cpu| cpu.cpu_usage()).collect::<Vec<_>>();
-    let _cpu_info = CpuInfoBasic::new(cpu_name,cpu_vendor, cpu_count, cpu_usage);
+    let _cpu_info = CpuInfoBasic::new(cpu_name, cpu_vendor, cpu_count, cpu_usage);
     Ok(_cpu_info)
 }
 

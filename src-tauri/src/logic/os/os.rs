@@ -3,12 +3,12 @@ use crate::kit::enums::os_enum::OsError;
 
 #[derive(Debug)]
 pub struct OsInfo {
-    pub os_name: String,
-    pub os_version: String,
-    pub os_arch: String,
-    pub os_kernel: String,
-    pub os_uptime: String,
-    pub os_hostname: String,
+    pub os_name: String, // 操作系统名称
+    pub os_version: String, // 操作系统版本
+    pub os_arch: String, // 操作系统架构
+    pub os_kernel: String, // 操作系统内核版本
+    pub os_uptime: String, // 操作系统运行时间
+    pub os_hostname: String, // 操作系统主机名
 }
 
 impl OsInfo {
@@ -26,15 +26,10 @@ impl OsInfo {
     }
 }
 
-enum OsName {
-    MacOS,
-    Windows,
-    Linux,
-    Other,
-}
 
+/// 获取操作系统信息
 pub fn get_os_info() -> Result<OsInfo, OsError> {
-    let mut os_name = System::name().unwrap().to_string();
+    let os_name;
     match System::name().unwrap().to_string().as_str() {
         "Darwin" => os_name = "MacOS".to_string(),
         "Windows" => os_name = "Windows".to_string(),
