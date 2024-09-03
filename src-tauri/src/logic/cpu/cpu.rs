@@ -9,15 +9,17 @@ pub struct CpuInfoBasic {
     pub cpu_vendor: String, // cpu 厂商
     pub cpu_count: usize, // cpu 核心数量
     pub cpu_usage: Vec<f32>, // 各个 cpu 使用率
+    pub global_cpu_usage: f32, // 全局 cpu 使用率
 }
 
 impl CpuInfoBasic {
-    fn new(cpu_name: String, cpu_vendor: String, cpu_count: usize, cpu_usage: Vec<f32>) -> CpuInfoBasic {
+    fn new(cpu_name: String, cpu_vendor: String, cpu_count: usize, cpu_usage: Vec<f32>, global_cpu_usage: f32) -> CpuInfoBasic {
         CpuInfoBasic {
             cpu_name,
             cpu_vendor,
             cpu_count,
             cpu_usage,
+            global_cpu_usage,
         }
     }
 }
@@ -34,7 +36,9 @@ pub fn get_cpu_info() -> Result<CpuInfoBasic, OsError> {
     let cpu_count = sys.cpus().len();
     // 获取CPU单个核心的当前使用率
     let cpu_usage = sys.cpus().iter().map(|cpu| cpu.cpu_usage()).collect::<Vec<_>>();
-    let _cpu_info = CpuInfoBasic::new(cpu_name, cpu_vendor, cpu_count, cpu_usage);
+    // 获取全局CPU的使用率
+    let global_cpu_usage = sys.global_cpu_usage();
+    let _cpu_info = CpuInfoBasic::new(cpu_name, cpu_vendor, cpu_count, cpu_usage, global_cpu_usage);
     Ok(_cpu_info)
 }
 
