@@ -1,4 +1,5 @@
 pub mod logic;
+pub mod kit;
 
 // Learn more about Tauri commands at https://tauri.app/v1/guides/features/command
 #[tauri::command]
