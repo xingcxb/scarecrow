@@ -33,7 +33,7 @@ pub fn get_cpu_info() -> Result<CpuInfoBasic, OsError> {
     // 获取CPU的厂商
     let cpu_vendor = sys.cpus()[0].vendor_id().to_string();
     // 获取CPU的总核心数
-    let cpu_count = sys.cpus().len();
+    let cpu_count = sys.physical_core_count().unwrap();
     // 获取CPU单个核心的当前使用率
     let cpu_usage = sys.cpus().iter().map(|cpu| cpu.cpu_usage()).collect::<Vec<_>>();
     // 获取全局CPU的使用率

@@ -1,7 +1,7 @@
 use crate::kit::enums::os_enum::OsError;
 use sysinfo::Disks;
 use crate::kit::unit_kit::unit_kit;
-use crate::kit::unit_kit::unit_kit::Unit;
+use crate::kit::unit_kit::unit_kit::{Unit, Carry};
 
 #[derive(Debug)]
 pub struct HardDiskInfo {
@@ -54,20 +54,28 @@ pub fn get_hard_disk_info() -> Result<Vec<HardDiskInfo>, OsError> {
     let mut disk_infos: Vec<HardDiskInfo> = Vec::new();
     for disk in &disks {
         // 获取硬盘容量
-        let _disk_total_space = unit_kit::convert_unit(disk.total_space(), Unit::GB);
+        let _disk_total_space = unit_kit::bit_unit(disk.total_space(), Carry::Decimal, Unit::GB);
         // 获取硬盘可用空间
-        let _disk_available_space = unit_kit::convert_unit(disk.available_space(), Unit::GB);
+        let _disk_available_space = unit_kit::bit_unit(disk.available_space(),Carry::Decimal, Unit::GB);
         // 已使用的空间
         let _disk_used_space = _disk_total_space - _disk_available_space;
         let disk_info = HardDiskInfo::new(
-            disk.name().to_str().unwrap().to_string(),
-            "".to_string(), "".to_string(), "".to_string(),
-            _disk_total_space.to_string(), disk.kind().to_string(),
-            "".to_string(), "".to_string(), "".to_string(), 
-            (_disk_used_space / _disk_total_space * 100.0).to_string(), 
-            _disk_available_space.to_string(),_disk_total_space.to_string(),
-            disk.file_system().to_str().unwrap().to_string(),
-            disk.is_removable(), disk.mount_point().to_str().unwrap().to_string());
+            disk.name().to_str().unwrap().to_string(), // 硬盘名称
+            "".to_string(), // 硬盘厂商
+            "".to_string(), // 硬盘型号
+            "".to_string(), // 硬盘序列号
+            _disk_total_space.to_string(), // 硬盘容量
+            disk.kind().to_string(), // 硬盘类型
+            "".to_string(), // 硬盘读速度
+            "".to_string(), // 硬盘写速度
+            "".to_string(), // 硬盘状态
+            (_disk_used_space / _disk_total_space * 100.0).to_string(), // 硬盘使用
+            _disk_available_space.to_string(), // 硬盘可用空间
+            _disk_total_space.to_string(), // 硬盘文件系统
+            disk.file_system().to_str().unwrap().to_string(), // 硬盘文件系统
+            disk.is_removable(), // 硬盘是否可移除
+            disk.mount_point().to_str().unwrap().to_string(), // 硬盘挂载点
+        );
         disk_infos.push(disk_info);
     };
     Ok(disk_infos)
