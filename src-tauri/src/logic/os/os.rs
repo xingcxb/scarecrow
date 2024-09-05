@@ -9,12 +9,14 @@ pub struct OsInfo {
     pub os_kernel: String, // 操作系统内核版本
     pub os_uptime: String, // 操作系统运行时间
     pub os_hostname: String, // 操作系统主机名
+    pub os_load_average: [f64; 3], // 操作系统负载平均值
 }
 
 impl OsInfo {
     pub fn new(os_name: String, os_version: String,
                os_arch: String, os_kernel: String,
-               os_uptime: String, os_hostname: String) -> OsInfo {
+               os_uptime: String, os_hostname: String,
+               os_load_average: [f64; 3]) -> OsInfo {
         OsInfo {
             os_name,
             os_version,
@@ -22,6 +24,7 @@ impl OsInfo {
             os_kernel,
             os_uptime,
             os_hostname,
+            os_load_average,
         }
     }
 }
@@ -36,10 +39,13 @@ pub fn get_os_info() -> Result<OsInfo, OsError> {
         "Linux" => os_name = "Linux".to_string(),
         _ => os_name = "Other".to_string(),
     }
+    let load_average = System::load_average();
+    let averages: [f64; 3] = [load_average.one, load_average.five, load_average.fifteen];
     let _os_info = OsInfo::new(os_name, System::os_version().unwrap().to_string(),
                                System::cpu_arch().unwrap().to_string(),
                                System::kernel_version().unwrap().to_string(),
                                System::uptime().to_string(),
-                               System::host_name().unwrap().to_string());
+                               System::host_name().unwrap().to_string(),
+                               averages);
     Ok(_os_info)
 }

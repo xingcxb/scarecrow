@@ -47,6 +47,8 @@ pub fn get_memory_info() -> Result<MemoryInfo, OsError> {
     // 交换已使用内存
     let used_swap = sys.used_swap();
     let used_swap_f = unit_kit::bit_unit(used_swap, unit_kit::Carry::Binary, unit_kit::Unit::GB);
-    let memory_info = MemoryInfo::new(total_f, free_f, used_f, total_swap_f, free_swap_f, used_swap_f);
+    let memory_info = MemoryInfo::new(total_f, free_f,
+                                      used_f, total_swap_f,
+                                      free_swap_f, used_swap_f);
     Ok(memory_info)
 }
